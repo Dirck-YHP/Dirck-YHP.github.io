@@ -2,6 +2,64 @@
 <search> 
   
   
+    
+    <entry>
+      <title>os-测试</title>
+      <link href="/2024/12/09/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/os-1/"/>
+      <url>/2024/12/09/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/os-1/</url>
+      
+        <content type="html"><![CDATA[<p>这是关于操作系统基本概念的第一篇文章</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 技术 </category>
+          
+          <category> 操作系统 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 进程管理 </tag>
+            
+            <tag> 内存管理 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>计网-测试</title>
+      <link href="/2024/12/04/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/Test/"/>
+      <url>/2024/12/04/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/Test/</url>
+      
+        <content type="html"><![CDATA[<p>这是关于计网的第一篇文章（测试）</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 技术 </category>
+          
+          <category> 计算机网络 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> TCP/IP </tag>
+            
+            <tag> 网络协议 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
   
   
 </search>
