@@ -1,0 +1,349 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>《计算机网络（谢希仁）》- 第八章 互联网上的音视频服务 | Adaptive Thinking</title><meta name="author" content="Yanhp"><meta name="copyright" content="Yanhp"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="目录 8.1 概述 8.2 流式存储音频&#x2F;视频 8.2.1 具有元文件的万维网服务器 8.2.2 媒体服务器 8.2.3 实时流式协议RTSP   8.3 交互式音频&#x2F;视频 8.3.1 IP电话概述 8.3.2 IP电话所需要的几种应用协议 8.3.3 实时运输协议RTP 8.3.4 实时运输控制协议RTCP 8.3.5 H.323 8.3.6 会话发起协议SIP   8.4">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《计算机网络（谢希仁）》- 第八章 互联网上的音视频服务">
+<meta property="og:url" content="https://dirck-yhp.github.io/2024/12/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E7%AC%AC%E5%85%AB%E7%AB%A0/%E7%AC%AC%E5%85%AB%E7%AB%A0-%E4%BA%92%E8%81%94%E7%BD%91%E4%B8%8A%E7%9A%84%E9%9F%B3%E8%A7%86%E9%A2%91%E6%9C%8D%E5%8A%A1/index.html">
+<meta property="og:site_name" content="Adaptive Thinking">
+<meta property="og:description" content="目录 8.1 概述 8.2 流式存储音频&#x2F;视频 8.2.1 具有元文件的万维网服务器 8.2.2 媒体服务器 8.2.3 实时流式协议RTSP   8.3 交互式音频&#x2F;视频 8.3.1 IP电话概述 8.3.2 IP电话所需要的几种应用协议 8.3.3 实时运输协议RTP 8.3.4 实时运输控制协议RTCP 8.3.5 H.323 8.3.6 会话发起协议SIP   8.4">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://dirck-yhp.github.io/img/cover.jpg">
+<meta property="article:published_time" content="2024-12-17T02:17:49.000Z">
+<meta property="article:modified_time" content="2024-12-17T02:18:49.318Z">
+<meta property="article:author" content="Yanhp">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://dirck-yhp.github.io/img/cover.jpg"><link rel="shortcut icon" href="/img/%E5%95%A4%E9%85%92.png"><link rel="canonical" href="https://dirck-yhp.github.io/2024/12/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E7%AC%AC%E5%85%AB%E7%AB%A0/%E7%AC%AC%E5%85%AB%E7%AB%A0-%E4%BA%92%E8%81%94%E7%BD%91%E4%B8%8A%E7%9A%84%E9%9F%B3%E8%A7%86%E9%A2%91%E6%9C%8D%E5%8A%A1/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '《计算机网络（谢希仁）》- 第八章 互联网上的音视频服务',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/avator.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">10</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">11</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/shuoshuo/"><i class="fa-fw fa fa-comments-o"></i><span> 分享</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/cover.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Adaptive Thinking</span></a><a class="nav-page-title" href="/"><span class="site-name">《计算机网络（谢希仁）》- 第八章 互联网上的音视频服务</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/shuoshuo/"><i class="fa-fw fa fa-comments-o"></i><span> 分享</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">《计算机网络（谢希仁）》- 第八章 互联网上的音视频服务</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-12-17T02:17:49.000Z" title="发表于 2024-12-17 10:17:49">2024-12-17</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-12-17T02:18:49.318Z" title="更新于 2024-12-17 10:18:49">2024-12-17</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ul>
+<li><a href="#81-%E6%A6%82%E8%BF%B0">8.1 概述</a></li>
+<li><a href="#82-%E6%B5%81%E5%BC%8F%E5%AD%98%E5%82%A8%E9%9F%B3%E9%A2%91%E8%A7%86%E9%A2%91">8.2 流式存储音频&#x2F;视频</a><ul>
+<li><a href="#821-%E5%85%B7%E6%9C%89%E5%85%83%E6%96%87%E4%BB%B6%E7%9A%84%E4%B8%87%E7%BB%B4%E7%BD%91%E6%9C%8D%E5%8A%A1%E5%99%A8">8.2.1 具有元文件的万维网服务器</a></li>
+<li><a href="#822-%E5%AA%92%E4%BD%93%E6%9C%8D%E5%8A%A1%E5%99%A8">8.2.2 媒体服务器</a></li>
+<li><a href="#823-%E5%AE%9E%E6%97%B6%E6%B5%81%E5%BC%8F%E5%8D%8F%E8%AE%AErtsp">8.2.3 实时流式协议RTSP</a></li>
+</ul>
+</li>
+<li><a href="#83-%E4%BA%A4%E4%BA%92%E5%BC%8F%E9%9F%B3%E9%A2%91%E8%A7%86%E9%A2%91">8.3 交互式音频&#x2F;视频</a><ul>
+<li><a href="#831-ip%E7%94%B5%E8%AF%9D%E6%A6%82%E8%BF%B0">8.3.1 IP电话概述</a></li>
+<li><a href="#832-ip%E7%94%B5%E8%AF%9D%E6%89%80%E9%9C%80%E8%A6%81%E7%9A%84%E5%87%A0%E7%A7%8D%E5%BA%94%E7%94%A8%E5%8D%8F%E8%AE%AE">8.3.2 IP电话所需要的几种应用协议</a></li>
+<li><a href="#833-%E5%AE%9E%E6%97%B6%E8%BF%90%E8%BE%93%E5%8D%8F%E8%AE%AErtp">8.3.3 实时运输协议RTP</a></li>
+<li><a href="#834-%E5%AE%9E%E6%97%B6%E8%BF%90%E8%BE%93%E6%8E%A7%E5%88%B6%E5%8D%8F%E8%AE%AErtcp">8.3.4 实时运输控制协议RTCP</a></li>
+<li><a href="#835-h323">8.3.5 H.323</a></li>
+<li><a href="#836-%E4%BC%9A%E8%AF%9D%E5%8F%91%E8%B5%B7%E5%8D%8F%E8%AE%AEsip">8.3.6 会话发起协议SIP</a></li>
+</ul>
+</li>
+<li><a href="#84-%E6%94%B9%E8%BF%9B%E5%B0%BD%E6%9C%80%E5%A4%A7%E5%8A%AA%E5%8A%9B%E4%BA%A4%E4%BB%98%E7%9A%84%E6%9C%8D%E5%8A%A1">8.4 改进”尽最大努力交付”的服务</a><ul>
+<li><a href="#841-%E4%BD%BF%E4%BA%92%E8%81%94%E7%BD%91%E6%8F%90%E4%BE%9B%E6%9C%8D%E5%8A%A1%E8%B4%A8%E9%87%8F">8.4.1 使互联网提供服务质量</a></li>
+<li><a href="#842-%E8%B0%83%E5%BA%A6%E5%92%8C%E7%AE%A1%E5%88%B6%E6%9C%BA%E5%88%B6">8.4.2 调度和管制机制</a></li>
+<li><a href="#843-%E7%BB%BC%E5%90%88%E6%9C%8D%E5%8A%A1intserv%E4%B8%8E%E8%B5%84%E6%BA%90%E9%A2%84%E7%95%99%E5%8D%8F%E8%AE%AErsvp">8.4.3 综合服务IntServ与资源预留协议RSVP</a></li>
+<li><a href="#844-%E5%8C%BA%E5%88%86%E6%9C%8D%E5%8A%A1diffserv">8.4.4 区分服务DiffServ</a></li>
+</ul>
+</li>
+</ul>
+<h2 id="8-1-概述"><a href="#8-1-概述" class="headerlink" title="8.1 概述"></a>8.1 概述</h2><p><strong>多媒体数据传输的特点：</strong></p>
+<ul>
+<li>“边传输，边播放”</li>
+<li>信息量往往很大</li>
+<li>对传输时延和时延抖动有较高要求</li>
+</ul>
+<p><strong>多媒体分组传输过程：</strong></p>
+<ul>
+<li>发送时是等时的</li>
+<li>到达接收端时变成非等时</li>
+<li>接收端处理流程：<ol>
+<li>等待缓存中分组达到一定数量</li>
+<li>以恒定速率按顺序还原播放</li>
+<li>产生播放时延，但可以消除时延抖动</li>
+</ol>
+</li>
+</ul>
+<p><strong>时延敏感数据的处理原则：</strong></p>
+<ul>
+<li>宁可丢失少量分组，也不要接收太晚到达的分组</li>
+<li>典型应用：视频会议</li>
+</ul>
+<p><strong>互联网音频&#x2F;视频服务的三种类型：</strong></p>
+<ol>
+<li><strong>流式存储音频&#x2F;视频（流媒体）</strong>：<ul>
+<li>边下载边播放</li>
+</ul>
+</li>
+<li><strong>流式实况音频&#x2F;视频</strong>：<ul>
+<li>边录制边发送</li>
+<li>边下载边播放</li>
+</ul>
+</li>
+<li><strong>交互式音频&#x2F;视频</strong>：<ul>
+<li>互联网电话</li>
+<li>视频会议等</li>
+</ul>
+</li>
+</ol>
+<h2 id="8-2-流式存储音频-视频"><a href="#8-2-流式存储音频-视频" class="headerlink" title="8.2 流式存储音频&#x2F;视频"></a>8.2 流式存储音频&#x2F;视频</h2><h3 id="8-2-1-具有元文件的万维网服务器"><a href="#8-2-1-具有元文件的万维网服务器" class="headerlink" title="8.2.1 具有元文件的万维网服务器"></a>8.2.1 具有元文件的万维网服务器</h3><p><strong>流媒体特点：</strong></p>
+<ul>
+<li>可以边下载边播放</li>
+<li>不能存储在硬盘上成为用户文件</li>
+</ul>
+<h3 id="8-2-2-媒体服务器"><a href="#8-2-2-媒体服务器" class="headerlink" title="8.2.2 媒体服务器"></a>8.2.2 媒体服务器</h3><p><strong>基本概念：</strong></p>
+<ul>
+<li>又称流式服务器</li>
+<li>更好地支持流式音频和视频传送</li>
+</ul>
+<p><strong>传输协议选择：</strong></p>
+<ul>
+<li><font color="red">TCP</font>：能保证播放质量，但滞后时间长</li>
+<li><font color="red">UDP</font>：适用于实时流式音频&#x2F;视频文件传送</li>
+</ul>
+<h3 id="8-2-3-实时流式协议RTSP"><a href="#8-2-3-实时流式协议RTSP" class="headerlink" title="8.2.3 实时流式协议RTSP"></a>8.2.3 实时流式协议RTSP</h3><p><strong><font color="red">RTSP</font>协议特点：</strong></p>
+<ul>
+<li>为流式传送过程增加更多功能</li>
+<li>本身不传送数据</li>
+<li>仅使媒体播放器能够控制多媒体流的传送</li>
+</ul>
+<h2 id="8-3-交互式音频-视频"><a href="#8-3-交互式音频-视频" class="headerlink" title="8.3 交互式音频&#x2F;视频"></a>8.3 交互式音频&#x2F;视频</h2><h3 id="8-3-1-IP电话概述"><a href="#8-3-1-IP电话概述" class="headerlink" title="8.3.1 IP电话概述"></a>8.3.1 IP电话概述</h3><p><strong>IP电话的定义：</strong></p>
+<ul>
+<li>通过 <font color="red">IP</font> 网络进行的交互式多媒体实时通信</li>
+<li>包括视频通话、即时传信<font color="red">IM</font>（如 QQ）等</li>
+</ul>
+<p><strong>IP电话通信质量的决定因素：</strong></p>
+<ol>
+<li>通话双方端到端的时延和时延抖动</li>
+<li>话音分组的丢失率</li>
+</ol>
+<h3 id="8-3-2-IP电话所需要的几种应用协议"><a href="#8-3-2-IP电话所需要的几种应用协议" class="headerlink" title="8.3.2 IP电话所需要的几种应用协议"></a>8.3.2 IP电话所需要的几种应用协议</h3><h3 id="8-3-3-实时运输协议RTP"><a href="#8-3-3-实时运输协议RTP" class="headerlink" title="8.3.3 实时运输协议RTP"></a>8.3.3 实时运输协议RTP</h3><p><strong><font color="red">RTP</font>的特点：</strong></p>
+<ul>
+<li>采用无连接的 <font color="red">UDP</font> 协议</li>
+<li>为实时应用提供端到端运输</li>
+<li>不提供任何服务质量保证</li>
+<li>可看作 <font color="red">UDP</font> 之上的运输层子层协议</li>
+</ul>
+<p><strong>工作原理：</strong></p>
+<ul>
+<li>将多媒体数据块封装成 <font color="red">RTP</font> 分组</li>
+<li>装入运输层的 <font color="red">UDP</font> 数据报</li>
+</ul>
+<h3 id="8-3-4-实时运输控制协议RTCP"><a href="#8-3-4-实时运输控制协议RTCP" class="headerlink" title="8.3.4 实时运输控制协议RTCP"></a>8.3.4 实时运输控制协议RTCP</h3><p><strong><font color="red">RTCP</font>的特点：</strong></p>
+<ul>
+<li>与 <font color="red">RTP</font> 配合使用</li>
+<li>采用 <font color="red">UDP</font> 服务</li>
+<li>不对音频&#x2F;视频分组进行封装</li>
+</ul>
+<p><strong>主要功能：</strong></p>
+<ol>
+<li>服务质量的监视与反馈</li>
+<li>媒体间的同步</li>
+<li>多播组中成员的标志</li>
+</ol>
+<h3 id="8-3-5-H-323"><a href="#8-3-5-H-323" class="headerlink" title="8.3.5 H.323"></a>8.3.5 H.323</h3><p><strong>基本概念：</strong></p>
+<ul>
+<li>信令是通信双方为建立呼叫连接和控制而传送的专门信息</li>
+<li>IP 电话有两套信令标准：<font color="red">H.323</font> 和 <font color="red">SIP</font></li>
+<li><font color="red">H.323</font> 是一组协议，功能多且复杂</li>
+</ul>
+<p><strong><font color="red">H.323</font>标准的四个构件：</strong></p>
+<ol>
+<li><font color="red">H.323</font> 终端</li>
+<li>网关</li>
+<li>网闸</li>
+<li>多点控制单元 <font color="red">MCU</font></li>
+</ol>
+<h3 id="8-3-6-会话发起协议SIP"><a href="#8-3-6-会话发起协议SIP" class="headerlink" title="8.3.6 会话发起协议SIP"></a>8.3.6 会话发起协议SIP</h3><p><strong><font color="red">SIP</font>的特点：</strong></p>
+<ul>
+<li>比 <font color="red">H.323</font> 简单</li>
+<li>只涉及 IP 电话所需的信令和服务质量</li>
+<li>使用文本方式的客户服务器协议</li>
+</ul>
+<p><strong><font color="red">SIP</font>系统的两种构件：</strong></p>
+<ol>
+<li><strong>用户代理：</strong><ul>
+<li>用户代理客户</li>
+<li>用户代理服务器</li>
+</ul>
+</li>
+<li><strong>网络服务器：</strong><ul>
+<li>代理服务器</li>
+<li>重定向服务器</li>
+</ul>
+</li>
+</ol>
+<p><strong><font color="red">SIP</font>地址特点：</strong></p>
+<ul>
+<li>格式灵活</li>
+<li>可以是电话号码、电子邮件、IP 地址等</li>
+</ul>
+<h2 id="8-4-改进”尽最大努力交付”的服务"><a href="#8-4-改进”尽最大努力交付”的服务" class="headerlink" title="8.4 改进”尽最大努力交付”的服务"></a>8.4 改进”尽最大努力交付”的服务</h2><h3 id="8-4-1-使互联网提供服务质量"><a href="#8-4-1-使互联网提供服务质量" class="headerlink" title="8.4.1 使互联网提供服务质量"></a>8.4.1 使互联网提供服务质量</h3><p><strong>服务质量（<font color="red">QoS</font>）：</strong></p>
+<ul>
+<li>是服务效能的总效果</li>
+<li>决定用户对服务的满意程度</li>
+</ul>
+<p><strong>服务质量的性能指标：</strong></p>
+<ul>
+<li>可用性</li>
+<li>差错率</li>
+<li>响应时间</li>
+<li>吞吐量</li>
+<li>分组丢失率</li>
+</ul>
+<p><strong>提高服务质量的措施：</strong></p>
+<ol>
+<li>分类：区分服务</li>
+<li>管制</li>
+<li>调制</li>
+<li>呼叫接纳</li>
+<li>加权公平排队</li>
+</ol>
+<h3 id="8-4-2-调度和管制机制"><a href="#8-4-2-调度和管制机制" class="headerlink" title="8.4.2 调度和管制机制"></a>8.4.2 调度和管制机制</h3><h3 id="8-4-3-综合服务IntServ与资源预留协议RSVP"><a href="#8-4-3-综合服务IntServ与资源预留协议RSVP" class="headerlink" title="8.4.3 综合服务IntServ与资源预留协议RSVP"></a>8.4.3 综合服务IntServ与资源预留协议RSVP</h3><p><strong>综合服务 <font color="red">IntServ</font>：</strong></p>
+<ul>
+<li>可对单个应用对话提供服务质量保证</li>
+<li>定义了两类服务：<ul>
+<li>有保证的服务</li>
+<li>受控负载的服务</li>
+</ul>
+</li>
+</ul>
+<p><strong><font color="red">IntServ</font>的四个组成部分：</strong></p>
+<ol>
+<li>资源预留协议 <font color="red">RSVP</font></li>
+<li>接纳控制</li>
+<li>分类器</li>
+<li>调度器</li>
+</ol>
+<h3 id="8-4-4-区分服务DiffServ"><a href="#8-4-4-区分服务DiffServ" class="headerlink" title="8.4.4 区分服务DiffServ"></a>8.4.4 区分服务DiffServ</h3><p><strong>区分服务 <font color="red">DiffServ</font>（<font color="red">DS</font>）的特点：</strong></p>
+<ul>
+<li>在路由器中增加区分服务功能</li>
+<li>IP 数据报中有区分服务字段</li>
+<li>利用 <font color="red">DS</font> 字段提供不同等级服务质量</li>
+<li>将复杂性放在 <font color="red">DS</font> 域的边界结点中</li>
+<li>使 <font color="red">DS</font> 域内路由器工作尽可能简单</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://dirck-yhp.github.io">Yanhp</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://dirck-yhp.github.io/2024/12/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E7%AC%AC%E5%85%AB%E7%AB%A0/%E7%AC%AC%E5%85%AB%E7%AB%A0-%E4%BA%92%E8%81%94%E7%BD%91%E4%B8%8A%E7%9A%84%E9%9F%B3%E8%A7%86%E9%A2%91%E6%9C%8D%E5%8A%A1/">https://dirck-yhp.github.io/2024/12/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E7%AC%AC%E5%85%AB%E7%AB%A0/%E7%AC%AC%E5%85%AB%E7%AB%A0-%E4%BA%92%E8%81%94%E7%BD%91%E4%B8%8A%E7%9A%84%E9%9F%B3%E8%A7%86%E9%A2%91%E6%9C%8D%E5%8A%A1/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://dirck-yhp.github.io" target="_blank">Adaptive Thinking</a>！</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="/img/cover.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2024/12/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E7%AC%AC%E4%B9%9D%E7%AB%A0/%E6%97%A0%E7%BA%BF%E7%BD%91%E7%BB%9C%E5%92%8C%E7%A7%BB%E5%8A%A8%E7%BD%91%E7%BB%9C/" title="《计算机网络（谢希仁）》- 第九章 无线网络和移动网络"><img class="cover" src="/img/cover.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">《计算机网络（谢希仁）》- 第九章 无线网络和移动网络</div></div><div class="info-2"><div class="info-item-1">目录 9.1 无线局域网WLAN 9.1.1 无线局域网的组成 9.1.2 802.11局域网的物理层 9.1.3 802.11局域网的MAC层协议 9.1.4 802.11局域网的MAC帧   9.2 无线个人区域网WPAN 9.3 无线城域网WMAN 9.4 蜂窝移动通信网 9.4.1 蜂窝无线通信技术简介 9.4.2 移动IP 9.4.3 蜂窝移动通信网中对移动用户的路由选择 9.4.4 GSM中的切换 9.4.5 无线网络对高层协议的影响   9.5 两种不同的无线上网  9.1 无线局域网WLAN无线局域网：Wireless Local Area Network (WLAN) 9.1.1 无线局域网的组成无线局域网可以分为两大类:  有固定基础设施的无线局域网：  使用预先建立的基站覆盖固定地址 采用 802.11 系列协议 例如：蜂窝移动通信网使用电信公司的固定基站   无固定基础设施的无线局域网：  移动自组网络 例如：蓝牙    802.11协议相关概念：  无线以太网标准是 802.11 系列协议 使用 802.11 系列协议的局域网称为 Wi-Fi WLAN...</div></div></div></a><a class="pagination-related" href="/2024/12/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E7%AC%AC%E5%85%AD%E7%AB%A0-%E5%BA%94%E7%94%A8%E5%B1%82/" title="《计算机网络（谢希仁）》- 第六章 应用层"><img class="cover" src="/img/cover.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">《计算机网络（谢希仁）》- 第六章 应用层</div></div><div class="info-2"><div class="info-item-1">目录 6.1 域名系统DNS 6.1.1 域名系统概述 6.1.2 互联网的域名结构 6.1.3 域名服务器   6.2 文件传送协议 6.2.1 FTP概述 6.2.2 FTP的基本工作原理 6.2.3 简单文件传送协议TFTP   6.3 远程终端协议TELNET 6.4 万维网www 6.4.1 万维网概述 6.4.2 统一资源定位符URL 6.4.3 超文本传送协议HTTP 6.4.4 万维网的文档 6.4.5 万维网的信息检索系统   6.5 电子邮件 6.5.1 电子邮件概述 6.5.2 简单邮件传送协议SMTP 6.5.3 电子邮件的信息格式 6.5.4 邮件读取协议POP3和IMAP 6.5.5 基于万维网的电子邮件 6.5.6 通用互联网邮件扩充MIME   6.6 动态主机配置协议DHCP 6.7 简单网络管理协议SNMP 6.7.1 网络管理的基本概念 6.7.2 管理信息结构SMI 6.7.3 管理信息库MIB 6.7.4 SNMP的协议数据单元和报文   6.8 应用进程跨越网络的通信 6.8.1 系统调用和应用编程接口 6.8.2...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/avator.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Yanhp</div><div class="author-info-description">Keep calm and carry on.</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">10</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">11</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Dirck-YHP"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/Dirck-YHP" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:Yanhp@zju.edu.cn" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a><a class="social-icon" href="https://www.yuque.com/dirck" target="_blank" title="语雀"><i class="fab fa-book-open" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">摸鱼ing...</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%AE%E5%BD%95"><span class="toc-number">1.</span> <span class="toc-text">目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-1-%E6%A6%82%E8%BF%B0"><span class="toc-number">2.</span> <span class="toc-text">8.1 概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-2-%E6%B5%81%E5%BC%8F%E5%AD%98%E5%82%A8%E9%9F%B3%E9%A2%91-%E8%A7%86%E9%A2%91"><span class="toc-number">3.</span> <span class="toc-text">8.2 流式存储音频&#x2F;视频</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#8-2-1-%E5%85%B7%E6%9C%89%E5%85%83%E6%96%87%E4%BB%B6%E7%9A%84%E4%B8%87%E7%BB%B4%E7%BD%91%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-number">3.1.</span> <span class="toc-text">8.2.1 具有元文件的万维网服务器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-2-2-%E5%AA%92%E4%BD%93%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-number">3.2.</span> <span class="toc-text">8.2.2 媒体服务器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-2-3-%E5%AE%9E%E6%97%B6%E6%B5%81%E5%BC%8F%E5%8D%8F%E8%AE%AERTSP"><span class="toc-number">3.3.</span> <span class="toc-text">8.2.3 实时流式协议RTSP</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-3-%E4%BA%A4%E4%BA%92%E5%BC%8F%E9%9F%B3%E9%A2%91-%E8%A7%86%E9%A2%91"><span class="toc-number">4.</span> <span class="toc-text">8.3 交互式音频&#x2F;视频</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#8-3-1-IP%E7%94%B5%E8%AF%9D%E6%A6%82%E8%BF%B0"><span class="toc-number">4.1.</span> <span class="toc-text">8.3.1 IP电话概述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-3-2-IP%E7%94%B5%E8%AF%9D%E6%89%80%E9%9C%80%E8%A6%81%E7%9A%84%E5%87%A0%E7%A7%8D%E5%BA%94%E7%94%A8%E5%8D%8F%E8%AE%AE"><span class="toc-number">4.2.</span> <span class="toc-text">8.3.2 IP电话所需要的几种应用协议</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-3-3-%E5%AE%9E%E6%97%B6%E8%BF%90%E8%BE%93%E5%8D%8F%E8%AE%AERTP"><span class="toc-number">4.3.</span> <span class="toc-text">8.3.3 实时运输协议RTP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-3-4-%E5%AE%9E%E6%97%B6%E8%BF%90%E8%BE%93%E6%8E%A7%E5%88%B6%E5%8D%8F%E8%AE%AERTCP"><span class="toc-number">4.4.</span> <span class="toc-text">8.3.4 实时运输控制协议RTCP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-3-5-H-323"><span class="toc-number">4.5.</span> <span class="toc-text">8.3.5 H.323</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-3-6-%E4%BC%9A%E8%AF%9D%E5%8F%91%E8%B5%B7%E5%8D%8F%E8%AE%AESIP"><span class="toc-number">4.6.</span> <span class="toc-text">8.3.6 会话发起协议SIP</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-4-%E6%94%B9%E8%BF%9B%E2%80%9D%E5%B0%BD%E6%9C%80%E5%A4%A7%E5%8A%AA%E5%8A%9B%E4%BA%A4%E4%BB%98%E2%80%9D%E7%9A%84%E6%9C%8D%E5%8A%A1"><span class="toc-number">5.</span> <span class="toc-text">8.4 改进”尽最大努力交付”的服务</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#8-4-1-%E4%BD%BF%E4%BA%92%E8%81%94%E7%BD%91%E6%8F%90%E4%BE%9B%E6%9C%8D%E5%8A%A1%E8%B4%A8%E9%87%8F"><span class="toc-number">5.1.</span> <span class="toc-text">8.4.1 使互联网提供服务质量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-4-2-%E8%B0%83%E5%BA%A6%E5%92%8C%E7%AE%A1%E5%88%B6%E6%9C%BA%E5%88%B6"><span class="toc-number">5.2.</span> <span class="toc-text">8.4.2 调度和管制机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-4-3-%E7%BB%BC%E5%90%88%E6%9C%8D%E5%8A%A1IntServ%E4%B8%8E%E8%B5%84%E6%BA%90%E9%A2%84%E7%95%99%E5%8D%8F%E8%AE%AERSVP"><span class="toc-number">5.3.</span> <span class="toc-text">8.4.3 综合服务IntServ与资源预留协议RSVP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-4-4-%E5%8C%BA%E5%88%86%E6%9C%8D%E5%8A%A1DiffServ"><span class="toc-number">5.4.</span> <span class="toc-text">8.4.4 区分服务DiffServ</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/12/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E7%AC%AC%E4%B8%83%E7%AB%A0/%E7%AC%AC%E4%B8%83%E7%AB%A0-%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/" title="《计算机网络（谢希仁）》- 第七章 网络安全"><img src="/img/cover.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="《计算机网络（谢希仁）》- 第七章 网络安全"/></a><div class="content"><a class="title" href="/2024/12/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E7%AC%AC%E4%B8%83%E7%AB%A0/%E7%AC%AC%E4%B8%83%E7%AB%A0-%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/" title="《计算机网络（谢希仁）》- 第七章 网络安全">《计算机网络（谢希仁）》- 第七章 网络安全</a><time datetime="2024-12-17T02:17:49.000Z" title="发表于 2024-12-17 10:17:49">2024-12-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E7%AC%AC%E4%B9%9D%E7%AB%A0/%E6%97%A0%E7%BA%BF%E7%BD%91%E7%BB%9C%E5%92%8C%E7%A7%BB%E5%8A%A8%E7%BD%91%E7%BB%9C/" title="《计算机网络（谢希仁）》- 第九章 无线网络和移动网络"><img src="/img/cover.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="《计算机网络（谢希仁）》- 第九章 无线网络和移动网络"/></a><div class="content"><a class="title" href="/2024/12/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E7%AC%AC%E4%B9%9D%E7%AB%A0/%E6%97%A0%E7%BA%BF%E7%BD%91%E7%BB%9C%E5%92%8C%E7%A7%BB%E5%8A%A8%E7%BD%91%E7%BB%9C/" title="《计算机网络（谢希仁）》- 第九章 无线网络和移动网络">《计算机网络（谢希仁）》- 第九章 无线网络和移动网络</a><time datetime="2024-12-17T02:17:49.000Z" title="发表于 2024-12-17 10:17:49">2024-12-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E7%AC%AC%E5%85%AB%E7%AB%A0/%E7%AC%AC%E5%85%AB%E7%AB%A0-%E4%BA%92%E8%81%94%E7%BD%91%E4%B8%8A%E7%9A%84%E9%9F%B3%E8%A7%86%E9%A2%91%E6%9C%8D%E5%8A%A1/" title="《计算机网络（谢希仁）》- 第八章 互联网上的音视频服务"><img src="/img/cover.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="《计算机网络（谢希仁）》- 第八章 互联网上的音视频服务"/></a><div class="content"><a class="title" href="/2024/12/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E7%AC%AC%E5%85%AB%E7%AB%A0/%E7%AC%AC%E5%85%AB%E7%AB%A0-%E4%BA%92%E8%81%94%E7%BD%91%E4%B8%8A%E7%9A%84%E9%9F%B3%E8%A7%86%E9%A2%91%E6%9C%8D%E5%8A%A1/" title="《计算机网络（谢希仁）》- 第八章 互联网上的音视频服务">《计算机网络（谢希仁）》- 第八章 互联网上的音视频服务</a><time datetime="2024-12-17T02:17:49.000Z" title="发表于 2024-12-17 10:17:49">2024-12-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E7%AC%AC%E5%85%AD%E7%AB%A0-%E5%BA%94%E7%94%A8%E5%B1%82/" title="《计算机网络（谢希仁）》- 第六章 应用层"><img src="/img/cover.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="《计算机网络（谢希仁）》- 第六章 应用层"/></a><div class="content"><a class="title" href="/2024/12/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E7%AC%AC%E5%85%AD%E7%AB%A0-%E5%BA%94%E7%94%A8%E5%B1%82/" title="《计算机网络（谢希仁）》- 第六章 应用层">《计算机网络（谢希仁）》- 第六章 应用层</a><time datetime="2024-12-17T01:17:49.000Z" title="发表于 2024-12-17 09:17:49">2024-12-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/13/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E7%AC%AC%E4%BA%94%E7%AB%A0/%E7%AC%AC%E4%BA%94%E7%AB%A0-%E4%BC%A0%E8%BE%93%E5%B1%82/" title="《计算机网络（谢希仁）》- 第五章 传输层"><img src="/img/cover.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="《计算机网络（谢希仁）》- 第五章 传输层"/></a><div class="content"><a class="title" href="/2024/12/13/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E7%AC%AC%E4%BA%94%E7%AB%A0/%E7%AC%AC%E4%BA%94%E7%AB%A0-%E4%BC%A0%E8%BE%93%E5%B1%82/" title="《计算机网络（谢希仁）》- 第五章 传输层">《计算机网络（谢希仁）》- 第五章 传输层</a><time datetime="2024-12-13T01:17:49.000Z" title="发表于 2024-12-13 09:17:49">2024-12-13</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2024 By Yanhp</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

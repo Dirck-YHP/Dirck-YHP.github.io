@@ -1,0 +1,524 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>《计算机网络（谢希仁）》- 第九章 无线网络和移动网络 | Adaptive Thinking</title><meta name="author" content="Yanhp"><meta name="copyright" content="Yanhp"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="目录 9.1 无线局域网WLAN 9.1.1 无线局域网的组成 9.1.2 802.11局域网的物理层 9.1.3 802.11局域网的MAC层协议 9.1.4 802.11局域网的MAC帧   9.2 无线个人区域网WPAN 9.3 无线城域网WMAN 9.4 蜂窝移动通信网 9.4.1 蜂窝无线通信技术简介 9.4.2 移动IP 9.4.3 蜂窝移动通信网中对移动用户的路由选择 9.4.4 G">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《计算机网络（谢希仁）》- 第九章 无线网络和移动网络">
+<meta property="og:url" content="https://dirck-yhp.github.io/2024/12/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E7%AC%AC%E4%B9%9D%E7%AB%A0/%E6%97%A0%E7%BA%BF%E7%BD%91%E7%BB%9C%E5%92%8C%E7%A7%BB%E5%8A%A8%E7%BD%91%E7%BB%9C/index.html">
+<meta property="og:site_name" content="Adaptive Thinking">
+<meta property="og:description" content="目录 9.1 无线局域网WLAN 9.1.1 无线局域网的组成 9.1.2 802.11局域网的物理层 9.1.3 802.11局域网的MAC层协议 9.1.4 802.11局域网的MAC帧   9.2 无线个人区域网WPAN 9.3 无线城域网WMAN 9.4 蜂窝移动通信网 9.4.1 蜂窝无线通信技术简介 9.4.2 移动IP 9.4.3 蜂窝移动通信网中对移动用户的路由选择 9.4.4 G">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://dirck-yhp.github.io/img/cover.jpg">
+<meta property="article:published_time" content="2024-12-17T02:17:49.000Z">
+<meta property="article:modified_time" content="2024-12-17T02:41:05.848Z">
+<meta property="article:author" content="Yanhp">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://dirck-yhp.github.io/img/cover.jpg"><link rel="shortcut icon" href="/img/%E5%95%A4%E9%85%92.png"><link rel="canonical" href="https://dirck-yhp.github.io/2024/12/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E7%AC%AC%E4%B9%9D%E7%AB%A0/%E6%97%A0%E7%BA%BF%E7%BD%91%E7%BB%9C%E5%92%8C%E7%A7%BB%E5%8A%A8%E7%BD%91%E7%BB%9C/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '《计算机网络（谢希仁）》- 第九章 无线网络和移动网络',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/avator.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">10</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">11</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/shuoshuo/"><i class="fa-fw fa fa-comments-o"></i><span> 分享</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/cover.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Adaptive Thinking</span></a><a class="nav-page-title" href="/"><span class="site-name">《计算机网络（谢希仁）》- 第九章 无线网络和移动网络</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/shuoshuo/"><i class="fa-fw fa fa-comments-o"></i><span> 分享</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">《计算机网络（谢希仁）》- 第九章 无线网络和移动网络</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-12-17T02:17:49.000Z" title="发表于 2024-12-17 10:17:49">2024-12-17</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-12-17T02:41:05.848Z" title="更新于 2024-12-17 10:41:05">2024-12-17</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ul>
+<li><a href="#91-%E6%97%A0%E7%BA%BF%E5%B1%80%E5%9F%9F%E7%BD%91wlan">9.1 无线局域网WLAN</a><ul>
+<li><a href="#911-%E6%97%A0%E7%BA%BF%E5%B1%80%E5%9F%9F%E7%BD%91%E7%9A%84%E7%BB%84%E6%88%90">9.1.1 无线局域网的组成</a></li>
+<li><a href="#912-80211%E5%B1%80%E5%9F%9F%E7%BD%91%E7%9A%84%E7%89%A9%E7%90%86%E5%B1%82">9.1.2 802.11局域网的物理层</a></li>
+<li><a href="#913-80211%E5%B1%80%E5%9F%9F%E7%BD%91%E7%9A%84mac%E5%B1%82%E5%8D%8F%E8%AE%AE">9.1.3 802.11局域网的MAC层协议</a></li>
+<li><a href="#914-80211%E5%B1%80%E5%9F%9F%E7%BD%91%E7%9A%84mac%E5%B8%A7">9.1.4 802.11局域网的MAC帧</a></li>
+</ul>
+</li>
+<li><a href="#92-%E6%97%A0%E7%BA%BF%E4%B8%AA%E4%BA%BA%E5%8C%BA%E5%9F%9F%E7%BD%91wpan">9.2 无线个人区域网WPAN</a></li>
+<li><a href="#93-%E6%97%A0%E7%BA%BF%E5%9F%8E%E5%9F%9F%E7%BD%91wman">9.3 无线城域网WMAN</a></li>
+<li><a href="#94-%E8%9C%82%E7%AA%9D%E7%A7%BB%E5%8A%A8%E9%80%9A%E4%BF%A1%E7%BD%91">9.4 蜂窝移动通信网</a><ul>
+<li><a href="#941-%E8%9C%82%E7%AA%9D%E6%97%A0%E7%BA%BF%E9%80%9A%E4%BF%A1%E6%8A%80%E6%9C%AF%E7%AE%80%E4%BB%8B">9.4.1 蜂窝无线通信技术简介</a></li>
+<li><a href="#942-%E7%A7%BB%E5%8A%A8ip">9.4.2 移动IP</a></li>
+<li><a href="#943-%E8%9C%82%E7%AA%9D%E7%A7%BB%E5%8A%A8%E9%80%9A%E4%BF%A1%E7%BD%91%E4%B8%AD%E5%AF%B9%E7%A7%BB%E5%8A%A8%E7%94%A8%E6%88%B7%E7%9A%84%E8%B7%AF%E7%94%B1%E9%80%89%E6%8B%A9">9.4.3 蜂窝移动通信网中对移动用户的路由选择</a></li>
+<li><a href="#944-gsm%E4%B8%AD%E7%9A%84%E5%88%87%E6%8D%A2">9.4.4 GSM中的切换</a></li>
+<li><a href="#945-%E6%97%A0%E7%BA%BF%E7%BD%91%E7%BB%9C%E5%AF%B9%E9%AB%98%E5%B1%82%E5%8D%8F%E8%AE%AE%E7%9A%84%E5%BD%B1%E5%93%8D">9.4.5 无线网络对高层协议的影响</a></li>
+</ul>
+</li>
+<li><a href="#95-%E4%B8%A4%E7%A7%8D%E4%B8%8D%E5%90%8C%E7%9A%84%E6%97%A0%E7%BA%BF%E4%B8%8A%E7%BD%91">9.5 两种不同的无线上网</a></li>
+</ul>
+<h2 id="9-1-无线局域网WLAN"><a href="#9-1-无线局域网WLAN" class="headerlink" title="9.1 无线局域网WLAN"></a>9.1 无线局域网WLAN</h2><p>无线局域网：<font color="red">Wireless Local Area Network (WLAN)</font></p>
+<h3 id="9-1-1-无线局域网的组成"><a href="#9-1-1-无线局域网的组成" class="headerlink" title="9.1.1 无线局域网的组成"></a>9.1.1 无线局域网的组成</h3><p><strong>无线局域网可以分为两大类:</strong></p>
+<ol>
+<li><p><strong>有固定基础设施的无线局域网：</strong></p>
+<ul>
+<li>使用预先建立的基站覆盖固定地址</li>
+<li>采用 <font color="red">802.11</font> 系列协议</li>
+<li>例如：蜂窝移动通信网使用电信公司的固定基站</li>
+</ul>
+</li>
+<li><p><strong>无固定基础设施的无线局域网：</strong></p>
+<ul>
+<li>移动自组网络</li>
+<li>例如：蓝牙</li>
+</ul>
+</li>
+</ol>
+<p><strong>802.11协议相关概念：</strong></p>
+<ul>
+<li>无线以太网标准是 <font color="red">802.11</font> 系列协议</li>
+<li>使用 <font color="red">802.11</font> 系列协议的局域网称为 <font color="red">Wi-Fi</font></li>
+<li><font color="red">WLAN</font> 表示无线局域网，<font color="red">Wi-Fi</font> 是采用 <font color="red">802.11</font> 协议的局域网</li>
+<li><font color="red">Wi-Fi</font> 已成为 <font color="red">WLAN</font> 的代名词</li>
+</ul>
+<p><strong>802.11网络架构：</strong></p>
+<ul>
+<li>使用星形拓扑</li>
+<li>中心是接入点 <font color="red">AP</font></li>
+<li><font color="red">MAC</font> 层使用 <font color="red">CSMA&#x2F;CA</font> 协议和停止等待协议</li>
+<li>最小构件是基本服务集 <font color="red">BSS</font><ul>
+<li>包括一个基站和若干移动站</li>
+<li>接入点 <font color="red">AP</font> 就是 <font color="red">BSS</font> 内的基站</li>
+</ul>
+</li>
+</ul>
+<p><strong>BSS通信特点：</strong></p>
+<ul>
+<li><font color="red">BSS</font> 内站点可直接通信</li>
+<li>与其他站通信需通过接入点 <font color="red">AP</font></li>
+<li>每个 <font color="red">AP</font> 有服务集标识符 <font color="red">SSID</font>（即wifi名字）</li>
+<li><font color="red">BSS</font> 覆盖范围称为基本服务区 <font color="red">BSA</font>（直径≤100m）</li>
+<li><font color="red">AP</font> 之间使用有线连接<br><img src="/image.png" alt="alt text"></li>
+</ul>
+<p><strong>移动站漫游过程：</strong></p>
+<ol>
+<li>选择接入点 <font color="red">AP</font> 建立关联</li>
+<li>通过 <font color="red">AP</font> 发送 <font color="red">DHCP</font> 发现报文获取 IP 地址</li>
+<li>作为该 <font color="red">AP</font> 子网成员加入网络</li>
+</ol>
+<p><strong>移动站连接特点：</strong></p>
+<ul>
+<li>通常选择信号最强的 <font color="red">AP</font></li>
+<li><font color="red">AP</font> 信道资源有限</li>
+<li>采用 <font color="red">802.11</font> 协议通信</li>
+<li>现代设备内置无线网卡，实现 <font color="red">802.11</font> 物理层和 <font color="red">MAC</font> 层功能</li>
+<li>一般采用 <font color="red">WPA</font> 或 <font color="red">WPA2</font> 加密</li>
+</ul>
+<p><strong>移动自组网络：</strong></p>
+<ul>
+<li>无固定基础设施的无线局域网</li>
+<li>无基站，移动站平等通信形成临时网络</li>
+<li>一般不与外界网络连接</li>
+<li>典型例子：蓝牙</li>
+<li>无线传感器网络 <font color="red">WSN</font> 是快速发展的自组网络<ul>
+<li>由大量传感器节点通过无线通信构成</li>
+<li>物联网 <font color="red">IoT</font> 是其应用领域</li>
+</ul>
+</li>
+</ul>
+<h3 id="9-1-2-802-11局域网的物理层"><a href="#9-1-2-802-11局域网的物理层" class="headerlink" title="9.1.2 802.11局域网的物理层"></a>9.1.2 802.11局域网的物理层</h3><p><strong>802.11网络基本架构：</strong></p>
+<ul>
+<li>使用星形拓扑</li>
+<li>中心是接入点 <font color="red">AP</font></li>
+<li>接入点 <font color="red">AP</font> 是基本服务集内的基站</li>
+</ul>
+<p><strong>WiFi版本发展：</strong></p>
+<ul>
+<li>**WiFi6 (<font color="red">IEEE 802.11ax</font>)**：<ul>
+<li>2020年6月正式发布</li>
+<li>又称 <font color="red">HEW</font>（High Efficiency WLAN）</li>
+<li>支持 1GHz 到 6GHz 的所有 <font color="red">ISM</font> 频段</li>
+<li>包括 6GHz、2.4GHz 和 5GHz</li>
+<li>向下兼容 a&#x2F;b&#x2F;g&#x2F;n&#x2F;ac</li>
+<li>最高带宽为 160MHz</li>
+<li>单条流最高速率 1201Mbit&#x2F;s<br><img src="/image-1.png" alt="alt text"></li>
+</ul>
+</li>
+</ul>
+<p><strong>历史版本：</strong></p>
+<ul>
+<li>第 4 代 wifi：<font color="red">802.11n</font></li>
+<li>第 5 代 wifi：<font color="red">802.11ac</font></li>
+</ul>
+<h3 id="9-1-3-802-11局域网的MAC层协议"><a href="#9-1-3-802-11局域网的MAC层协议" class="headerlink" title="9.1.3 802.11局域网的MAC层协议"></a>9.1.3 802.11局域网的MAC层协议</h3><p><strong>协议对比：</strong></p>
+<ul>
+<li><font color="red">CSMA&#x2F;CA</font>：载波监听多点接入&#x2F;碰撞避免</li>
+<li><font color="red">CSMA&#x2F;CD</font>：载波监听多点接入&#x2F;碰撞检测</li>
+</ul>
+<p><strong>802.11 MAC层特点：</strong></p>
+<ul>
+<li>使用 <font color="red">CSMA&#x2F;CA</font> 协议和停止等待协议</li>
+<li>使用停止等待原因：无线信道通信质量差于有线信道</li>
+<li>不能使用 <font color="red">CSMA&#x2F;CD</font> 原因：无线局域网中站点不能都听见对方</li>
+</ul>
+<p><strong>MAC层协议的协调功能：</strong></p>
+<ol>
+<li><p><strong>分布协调功能（<font color="red">DCF</font>）：</strong></p>
+<ul>
+<li>不采用中心控制</li>
+<li>每个节点使用 <font color="red">CSMA</font> 机制</li>
+<li>通过争用信道获取发送权</li>
+</ul>
+</li>
+<li><p><strong>点协调功能（<font color="red">PCF</font>）：</strong></p>
+<ul>
+<li>可选功能</li>
+<li>用接入点 <font color="red">AP</font> 集中控制</li>
+<li>采用轮询方式分配发送权</li>
+<li>适用于时间敏感业务<br><img src="/image-2.png" alt="alt text"></li>
+</ul>
+</li>
+</ol>
+<p><strong>802.11采用的机制：</strong></p>
+<ol>
+<li><p><strong>帧间间隔时间：</strong></p>
+<ul>
+<li>完成发送后等待帧间间隔时间</li>
+<li>不同优先级帧具有不同帧间间隔 <font color="red">IFS</font></li>
+<li>可降低碰撞概率</li>
+</ul>
+</li>
+<li><p><strong>虚拟载波监听：</strong></p>
+<ul>
+<li>源站通知其他站占用时间</li>
+<li>其他站在此期间停止发送</li>
+<li>可降低碰撞概率</li>
+</ul>
+</li>
+<li><p><strong>随机退避算法：</strong></p>
+<ul>
+<li>信道空闲时等待 <font color="red">DIFS</font> 间隔</li>
+<li>执行退避算法</li>
+<li>维护退避计时器</li>
+<li>计时器归零后立即发送</li>
+</ul>
+</li>
+<li><p><strong>预约机制：</strong></p>
+<ul>
+<li>发送数据前先发送 <font color="red">RTS</font> 帧</li>
+<li>收到 <font color="red">CTS</font> 帧后发送数据</li>
+<li>预约帧指明预约时间</li>
+<li>其他站在预约期间不发送</li>
+<li>可选择性使用</li>
+</ul>
+</li>
+</ol>
+<h3 id="9-1-4-802-11局域网的MAC帧"><a href="#9-1-4-802-11局域网的MAC帧" class="headerlink" title="9.1.4 802.11局域网的MAC帧"></a>9.1.4 802.11局域网的MAC帧</h3><p><strong>MAC帧的基本特点：</strong></p>
+<ul>
+<li><p><font color="red">802.11</font> 的 <font color="red">MAC</font> 帧有三种类型：</p>
+<ul>
+<li>控制帧</li>
+<li>数据帧</li>
+<li>管理帧<br><img src="/image-3.png" alt="alt text"></li>
+</ul>
+</li>
+<li><p><font color="red">MAC</font> 帧首部有 30 字节</p>
+</li>
+<li><p>尾部是 4 字节的帧检验序列</p>
+</li>
+</ul>
+<p><strong>数据帧地址字段：</strong></p>
+<ul>
+<li><font color="red">802.11</font> 数据帧有4个地址字段</li>
+<li>地址4用于自组网络</li>
+<li>前三个地址内容取决于帧控制字段中的”去往 <font color="red">AP</font>“和”来自 <font color="red">AP</font>“<br><img src="/image-4.png" alt="alt text"></li>
+</ul>
+<h2 id="9-2-无线个人区域网WPAN"><a href="#9-2-无线个人区域网WPAN" class="headerlink" title="9.2 无线个人区域网WPAN"></a>9.2 无线个人区域网WPAN</h2><p><strong><font color="red">WPAN</font>特点：</strong></p>
+<ul>
+<li>把个人设备用无线技术连接的自组网络</li>
+<li>工作在 2.4GHz 频段</li>
+<li>包括：<ul>
+<li>蓝牙系统</li>
+<li><font color="red">ZigBee</font></li>
+<li>超高速 <font color="red">WPAN</font></li>
+</ul>
+</li>
+</ul>
+<h2 id="9-3-无线城域网WMAN"><a href="#9-3-无线城域网WMAN" class="headerlink" title="9.3 无线城域网WMAN"></a>9.3 无线城域网WMAN</h2><p><strong><font color="red">WMAN</font>特点：</strong></p>
+<ul>
+<li>可提供最后一英里的宽带无线接入</li>
+<li>可代替现有的有线宽带接入</li>
+<li>标准是 <font color="red">802.16</font> 系列协议</li>
+<li>可覆盖一个城市的部分区域<br><img src="/image-5.png" alt="alt text"></li>
+</ul>
+<h2 id="9-4-蜂窝移动通信网"><a href="#9-4-蜂窝移动通信网" class="headerlink" title="9.4 蜂窝移动通信网"></a>9.4 蜂窝移动通信网</h2><h3 id="9-4-1-蜂窝无线通信技术简介"><a href="#9-4-1-蜂窝无线通信技术简介" class="headerlink" title="9.4.1 蜂窝无线通信技术简介"></a>9.4.1 蜂窝无线通信技术简介</h3><p><strong>移动通信类型：</strong></p>
+<ul>
+<li>蜂窝移动通信</li>
+<li>卫星移动通信等</li>
+</ul>
+<p><strong>蜂窝移动通信特点：</strong></p>
+<ul>
+<li>属于小区制移动通信</li>
+<li>网络划分为多个小区（蜂窝）</li>
+<li>每个小区设置一个基站</li>
+<li>移动站通信必须通过基站完成</li>
+<li>现代蜂窝移动通信网采用了许多 <font color="red">IP</font> 技术</li>
+</ul>
+<p><strong>移动通信发展：</strong></p>
+<ul>
+<li><p><strong>2G（第二代）：</strong></p>
+<ul>
+<li>带宽为 200kHz</li>
+<li>代表是 <font color="red">GSM</font> 系统</li>
+<li><font color="red">GPRS</font> 也是 2G 技术</li>
+<li>基本只能提供电话和短信服务</li>
+</ul>
+</li>
+<li><p><strong>3G：</strong></p>
+<ul>
+<li>带宽为 5MHz</li>
+<li>使用 <font color="red">IP</font> 体系结构</li>
+<li>采用混合交换体制（电路交换和分组交换）</li>
+<li>以传输业务为主的通信系统</li>
+</ul>
+</li>
+</ul>
+<p><strong>3G&#x2F;4G特点：</strong></p>
+<ul>
+<li>诞生了上网卡</li>
+<li>上网卡可插入电脑 <font color="red">USB</font> 接口</li>
+<li>通过 3G&#x2F;4G 网络接入互联网</li>
+<li>用户共享带宽，实际分配带宽不确定</li>
+</ul>
+<p><strong>蜂窝结构特点：</strong></p>
+<ul>
+<li>每个基站发射功率要能覆盖本小区</li>
+<li>避免干扰邻近小区</li>
+<li>采用蜂窝结构最大化频分复用</li>
+<li>每个基站使用不同频率<br><img src="/image-6.png" alt="alt text"></li>
+</ul>
+<h3 id="9-4-2-移动IP"><a href="#9-4-2-移动IP" class="headerlink" title="9.4.2 移动IP"></a>9.4.2 移动IP</h3><p><strong>基本概念：</strong></p>
+<ul>
+<li>允许计算机移动到外地时仍保留原来的 IP 地址</li>
+<li>与 <font color="red">DHCP</font> 的区别：<ul>
+<li><font color="red">DHCP</font>：换位置时自动获取新IP地址</li>
+<li>移动 IP：在移动中保持原IP地址</li>
+</ul>
+</li>
+</ul>
+<p><strong>移动IP的重要概念：</strong></p>
+<ul>
+<li>永久地址&#x2F;归属地址</li>
+<li>归属网络</li>
+<li>被访网络</li>
+<li>归属代理</li>
+<li>外地代理</li>
+<li>转交地址</li>
+<li>同址转交地址<br><img src="/image-7.png" alt="alt text"></li>
+</ul>
+<p><strong>移动IP使用的协议：</strong></p>
+<ol>
+<li>移动站到外地代理的协议</li>
+<li>外地代理到归属代理的登记协议</li>
+<li>归属代理数据报封装协议</li>
+<li>外地代理拆封协议</li>
+</ol>
+<p><strong>实现机制：</strong></p>
+<ul>
+<li><p><strong>基本要素：</strong></p>
+<ul>
+<li>移动站必须有归属地址（永久地址）</li>
+<li>原始连接的网络为归属网络</li>
+<li>归属代理通常是归属网络上的路由器</li>
+</ul>
+</li>
+<li><p><strong>漫游过程：</strong></p>
+<ol>
+<li>移动站移动到外地网络（被访网络）</li>
+<li>被访网络使用外地代理（通常是路由器）</li>
+<li>外地代理负责：<ul>
+<li>创建临时转交地址</li>
+<li>通知归属代理转交地址</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+<p><strong>通信过程示例：</strong></p>
+<ol>
+<li><p><strong>通信者B发送数据到移动站A：</strong></p>
+<ul>
+<li>B发送数据报（目的地址为A的永久地址）</li>
+<li>归属代理截获数据报</li>
+<li>归属代理封装数据报（使用隧道技术）</li>
+<li>发送到外地代理（使用A的转交地址）</li>
+<li>外地代理拆封并转发给A</li>
+</ul>
+</li>
+<li><p><strong>移动站A回复B：</strong></p>
+<ul>
+<li>使用永久地址作为源地址</li>
+<li>直接发送到B的IP地址</li>
+<li>不需要经过归属代理</li>
+</ul>
+</li>
+</ol>
+<h3 id="9-4-3-蜂窝移动通信网中对移动用户的路由选择"><a href="#9-4-3-蜂窝移动通信网中对移动用户的路由选择" class="headerlink" title="9.4.3 蜂窝移动通信网中对移动用户的路由选择"></a>9.4.3 蜂窝移动通信网中对移动用户的路由选择</h3><p><strong>路由选择方式：</strong></p>
+<ul>
+<li>间接路由选择</li>
+<li>直接路由选择（需要通信者代理和锚外地代理）</li>
+</ul>
+<p><strong>移动交换中心数据库：</strong></p>
+<ol>
+<li><p><strong>归属位置寄存器 <font color="red">HLR</font>：</strong></p>
+<ul>
+<li>类似归属代理功能</li>
+</ul>
+</li>
+<li><p><strong>来访用户位置寄存器 <font color="red">VLR</font>：</strong></p>
+<ul>
+<li>类似外地代理功能</li>
+</ul>
+</li>
+</ol>
+<h3 id="9-4-4-GSM中的切换"><a href="#9-4-4-GSM中的切换" class="headerlink" title="9.4.4 GSM中的切换"></a>9.4.4 GSM中的切换</h3><p>（略）</p>
+<h3 id="9-4-5-无线网络对高层协议的影响"><a href="#9-4-5-无线网络对高层协议的影响" class="headerlink" title="9.4.5 无线网络对高层协议的影响"></a>9.4.5 无线网络对高层协议的影响</h3><p><strong>主要问题：</strong></p>
+<ul>
+<li>移动站漫游时网络连接中断</li>
+<li><font color="red">TCP</font> 报文段频繁丢失</li>
+<li><font color="red">TCP</font> 拥塞控制受影响</li>
+<li>拥塞窗口被错误缩小</li>
+</ul>
+<p><strong>解决方法：</strong></p>
+<ol>
+<li>本地恢复</li>
+<li>让 <font color="red">TCP</font> 发送方知道无线链路位置</li>
+<li>将含移动用户的端到端 <font color="red">TCP</font> 连接拆分：<ul>
+<li>移动用户到无线接入点一个 <font color="red">TCP</font> 连接</li>
+<li>剩余有线网络另一个 <font color="red">TCP</font> 连接</li>
+</ul>
+</li>
+</ol>
+<h2 id="9-5-两种不同的无线上网"><a href="#9-5-两种不同的无线上网" class="headerlink" title="9.5 两种不同的无线上网"></a>9.5 两种不同的无线上网</h2><p><strong>收费方式对比：</strong></p>
+<ol>
+<li><p><strong>蜂窝移动网络：</strong></p>
+<ul>
+<li>按流量计费</li>
+</ul>
+</li>
+<li><p><strong>WiFi：</strong></p>
+<ul>
+<li>通过宽带上网</li>
+<li>根据带宽和使用时间收费<br><img src="/image-8.png" alt="alt text"></li>
+</ul>
+</li>
+</ol>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://dirck-yhp.github.io">Yanhp</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://dirck-yhp.github.io/2024/12/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E7%AC%AC%E4%B9%9D%E7%AB%A0/%E6%97%A0%E7%BA%BF%E7%BD%91%E7%BB%9C%E5%92%8C%E7%A7%BB%E5%8A%A8%E7%BD%91%E7%BB%9C/">https://dirck-yhp.github.io/2024/12/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E7%AC%AC%E4%B9%9D%E7%AB%A0/%E6%97%A0%E7%BA%BF%E7%BD%91%E7%BB%9C%E5%92%8C%E7%A7%BB%E5%8A%A8%E7%BD%91%E7%BB%9C/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://dirck-yhp.github.io" target="_blank">Adaptive Thinking</a>！</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="/img/cover.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2024/12/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E7%AC%AC%E4%B8%83%E7%AB%A0/%E7%AC%AC%E4%B8%83%E7%AB%A0-%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/" title="《计算机网络（谢希仁）》- 第七章 网络安全"><img class="cover" src="/img/cover.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">《计算机网络（谢希仁）》- 第七章 网络安全</div></div><div class="info-2"><div class="info-item-1">目录 7.1 网络安全问题概述 7.1.1 计算机网络面临的安全性威胁 7.1.2 安全的计算机网络 7.1.3 数据加密模型   7.2 两类密码体制 7.2.1 对称密钥密码体制 7.2.2 公钥密码体制   7.3 数字签名 7.4 鉴别 7.4.1 报文鉴别 7.4.2 实体鉴别   7.5 密钥分配 7.5.1 对称密钥的分配 7.5.2 公钥的分配   7.6 互联网使用的安全协议 7.6.1 网络层安全协议 7.6.2 运输层安全协议 7.6.3 应用层安全协议   7.7 系统安全：防火墙与入侵检测 7.7.1 防火墙 7.7.2 入侵检测系统   7.8 一些未来的发展方向  7.1 网络安全问题概述7.1.1 计算机网络面临的安全性威胁计算机网络上的通信面临的威胁可以分为两大类：  被动攻击：如截获 主动攻击：如中断、篡改、伪造  7.1.2 安全的计算机网络安全的计算机网络应该达到：  保密性 端点鉴别 信息的完整性 运行的安全性  7.1.3...</div></div></div></a><a class="pagination-related" href="/2024/12/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E7%AC%AC%E5%85%AB%E7%AB%A0/%E7%AC%AC%E5%85%AB%E7%AB%A0-%E4%BA%92%E8%81%94%E7%BD%91%E4%B8%8A%E7%9A%84%E9%9F%B3%E8%A7%86%E9%A2%91%E6%9C%8D%E5%8A%A1/" title="《计算机网络（谢希仁）》- 第八章 互联网上的音视频服务"><img class="cover" src="/img/cover.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">《计算机网络（谢希仁）》- 第八章 互联网上的音视频服务</div></div><div class="info-2"><div class="info-item-1">目录 8.1 概述 8.2 流式存储音频&#x2F;视频 8.2.1 具有元文件的万维网服务器 8.2.2 媒体服务器 8.2.3 实时流式协议RTSP   8.3 交互式音频&#x2F;视频 8.3.1 IP电话概述 8.3.2 IP电话所需要的几种应用协议 8.3.3 实时运输协议RTP 8.3.4 实时运输控制协议RTCP 8.3.5 H.323 8.3.6 会话发起协议SIP   8.4 改进”尽最大努力交付”的服务 8.4.1 使互联网提供服务质量 8.4.2 调度和管制机制 8.4.3 综合服务IntServ与资源预留协议RSVP 8.4.4 区分服务DiffServ    8.1...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/avator.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Yanhp</div><div class="author-info-description">Keep calm and carry on.</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">10</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">11</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Dirck-YHP"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/Dirck-YHP" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:Yanhp@zju.edu.cn" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a><a class="social-icon" href="https://www.yuque.com/dirck" target="_blank" title="语雀"><i class="fab fa-book-open" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">摸鱼ing...</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%AE%E5%BD%95"><span class="toc-number">1.</span> <span class="toc-text">目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-1-%E6%97%A0%E7%BA%BF%E5%B1%80%E5%9F%9F%E7%BD%91WLAN"><span class="toc-number">2.</span> <span class="toc-text">9.1 无线局域网WLAN</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#9-1-1-%E6%97%A0%E7%BA%BF%E5%B1%80%E5%9F%9F%E7%BD%91%E7%9A%84%E7%BB%84%E6%88%90"><span class="toc-number">2.1.</span> <span class="toc-text">9.1.1 无线局域网的组成</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9-1-2-802-11%E5%B1%80%E5%9F%9F%E7%BD%91%E7%9A%84%E7%89%A9%E7%90%86%E5%B1%82"><span class="toc-number">2.2.</span> <span class="toc-text">9.1.2 802.11局域网的物理层</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9-1-3-802-11%E5%B1%80%E5%9F%9F%E7%BD%91%E7%9A%84MAC%E5%B1%82%E5%8D%8F%E8%AE%AE"><span class="toc-number">2.3.</span> <span class="toc-text">9.1.3 802.11局域网的MAC层协议</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9-1-4-802-11%E5%B1%80%E5%9F%9F%E7%BD%91%E7%9A%84MAC%E5%B8%A7"><span class="toc-number">2.4.</span> <span class="toc-text">9.1.4 802.11局域网的MAC帧</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-2-%E6%97%A0%E7%BA%BF%E4%B8%AA%E4%BA%BA%E5%8C%BA%E5%9F%9F%E7%BD%91WPAN"><span class="toc-number">3.</span> <span class="toc-text">9.2 无线个人区域网WPAN</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-3-%E6%97%A0%E7%BA%BF%E5%9F%8E%E5%9F%9F%E7%BD%91WMAN"><span class="toc-number">4.</span> <span class="toc-text">9.3 无线城域网WMAN</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-4-%E8%9C%82%E7%AA%9D%E7%A7%BB%E5%8A%A8%E9%80%9A%E4%BF%A1%E7%BD%91"><span class="toc-number">5.</span> <span class="toc-text">9.4 蜂窝移动通信网</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#9-4-1-%E8%9C%82%E7%AA%9D%E6%97%A0%E7%BA%BF%E9%80%9A%E4%BF%A1%E6%8A%80%E6%9C%AF%E7%AE%80%E4%BB%8B"><span class="toc-number">5.1.</span> <span class="toc-text">9.4.1 蜂窝无线通信技术简介</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9-4-2-%E7%A7%BB%E5%8A%A8IP"><span class="toc-number">5.2.</span> <span class="toc-text">9.4.2 移动IP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9-4-3-%E8%9C%82%E7%AA%9D%E7%A7%BB%E5%8A%A8%E9%80%9A%E4%BF%A1%E7%BD%91%E4%B8%AD%E5%AF%B9%E7%A7%BB%E5%8A%A8%E7%94%A8%E6%88%B7%E7%9A%84%E8%B7%AF%E7%94%B1%E9%80%89%E6%8B%A9"><span class="toc-number">5.3.</span> <span class="toc-text">9.4.3 蜂窝移动通信网中对移动用户的路由选择</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9-4-4-GSM%E4%B8%AD%E7%9A%84%E5%88%87%E6%8D%A2"><span class="toc-number">5.4.</span> <span class="toc-text">9.4.4 GSM中的切换</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9-4-5-%E6%97%A0%E7%BA%BF%E7%BD%91%E7%BB%9C%E5%AF%B9%E9%AB%98%E5%B1%82%E5%8D%8F%E8%AE%AE%E7%9A%84%E5%BD%B1%E5%93%8D"><span class="toc-number">5.5.</span> <span class="toc-text">9.4.5 无线网络对高层协议的影响</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-5-%E4%B8%A4%E7%A7%8D%E4%B8%8D%E5%90%8C%E7%9A%84%E6%97%A0%E7%BA%BF%E4%B8%8A%E7%BD%91"><span class="toc-number">6.</span> <span class="toc-text">9.5 两种不同的无线上网</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/12/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E7%AC%AC%E4%B8%83%E7%AB%A0/%E7%AC%AC%E4%B8%83%E7%AB%A0-%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/" title="《计算机网络（谢希仁）》- 第七章 网络安全"><img src="/img/cover.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="《计算机网络（谢希仁）》- 第七章 网络安全"/></a><div class="content"><a class="title" href="/2024/12/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E7%AC%AC%E4%B8%83%E7%AB%A0/%E7%AC%AC%E4%B8%83%E7%AB%A0-%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/" title="《计算机网络（谢希仁）》- 第七章 网络安全">《计算机网络（谢希仁）》- 第七章 网络安全</a><time datetime="2024-12-17T02:17:49.000Z" title="发表于 2024-12-17 10:17:49">2024-12-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E7%AC%AC%E4%B9%9D%E7%AB%A0/%E6%97%A0%E7%BA%BF%E7%BD%91%E7%BB%9C%E5%92%8C%E7%A7%BB%E5%8A%A8%E7%BD%91%E7%BB%9C/" title="《计算机网络（谢希仁）》- 第九章 无线网络和移动网络"><img src="/img/cover.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="《计算机网络（谢希仁）》- 第九章 无线网络和移动网络"/></a><div class="content"><a class="title" href="/2024/12/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E7%AC%AC%E4%B9%9D%E7%AB%A0/%E6%97%A0%E7%BA%BF%E7%BD%91%E7%BB%9C%E5%92%8C%E7%A7%BB%E5%8A%A8%E7%BD%91%E7%BB%9C/" title="《计算机网络（谢希仁）》- 第九章 无线网络和移动网络">《计算机网络（谢希仁）》- 第九章 无线网络和移动网络</a><time datetime="2024-12-17T02:17:49.000Z" title="发表于 2024-12-17 10:17:49">2024-12-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E7%AC%AC%E5%85%AB%E7%AB%A0/%E7%AC%AC%E5%85%AB%E7%AB%A0-%E4%BA%92%E8%81%94%E7%BD%91%E4%B8%8A%E7%9A%84%E9%9F%B3%E8%A7%86%E9%A2%91%E6%9C%8D%E5%8A%A1/" title="《计算机网络（谢希仁）》- 第八章 互联网上的音视频服务"><img src="/img/cover.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="《计算机网络（谢希仁）》- 第八章 互联网上的音视频服务"/></a><div class="content"><a class="title" href="/2024/12/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E7%AC%AC%E5%85%AB%E7%AB%A0/%E7%AC%AC%E5%85%AB%E7%AB%A0-%E4%BA%92%E8%81%94%E7%BD%91%E4%B8%8A%E7%9A%84%E9%9F%B3%E8%A7%86%E9%A2%91%E6%9C%8D%E5%8A%A1/" title="《计算机网络（谢希仁）》- 第八章 互联网上的音视频服务">《计算机网络（谢希仁）》- 第八章 互联网上的音视频服务</a><time datetime="2024-12-17T02:17:49.000Z" title="发表于 2024-12-17 10:17:49">2024-12-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E7%AC%AC%E5%85%AD%E7%AB%A0-%E5%BA%94%E7%94%A8%E5%B1%82/" title="《计算机网络（谢希仁）》- 第六章 应用层"><img src="/img/cover.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="《计算机网络（谢希仁）》- 第六章 应用层"/></a><div class="content"><a class="title" href="/2024/12/17/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E7%AC%AC%E5%85%AD%E7%AB%A0/%E7%AC%AC%E5%85%AD%E7%AB%A0-%E5%BA%94%E7%94%A8%E5%B1%82/" title="《计算机网络（谢希仁）》- 第六章 应用层">《计算机网络（谢希仁）》- 第六章 应用层</a><time datetime="2024-12-17T01:17:49.000Z" title="发表于 2024-12-17 09:17:49">2024-12-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/13/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E7%AC%AC%E4%BA%94%E7%AB%A0/%E7%AC%AC%E4%BA%94%E7%AB%A0-%E4%BC%A0%E8%BE%93%E5%B1%82/" title="《计算机网络（谢希仁）》- 第五章 传输层"><img src="/img/cover.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="《计算机网络（谢希仁）》- 第五章 传输层"/></a><div class="content"><a class="title" href="/2024/12/13/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E7%AC%AC%E4%BA%94%E7%AB%A0/%E7%AC%AC%E4%BA%94%E7%AB%A0-%E4%BC%A0%E8%BE%93%E5%B1%82/" title="《计算机网络（谢希仁）》- 第五章 传输层">《计算机网络（谢希仁）》- 第五章 传输层</a><time datetime="2024-12-13T01:17:49.000Z" title="发表于 2024-12-13 09:17:49">2024-12-13</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2024 By Yanhp</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
